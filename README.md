@@ -1,4 +1,21 @@
 # Projeto Banco de Dados
+
+![SQL](https://img.shields.io/badge/SQL-2563EB?style=flat-square) ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white)
+
+**Controle de notebooks corporativos.** Trabalho em equipe do Senac Santana, com participação de César de Oliveira Zanelatto, Kleber Amaro da Silva e Rafael Sper Moralli. Este repositório é um fork de [CesarZanelatto/ProjetoBancodeDados](https://github.com/CesarZanelatto/ProjetoBancodeDados).
+
+## Navegação pelos scripts
+
+- [Criação do banco](ProjetoDB/CriacaoDoDB.sql)
+- [Tabelas](ProjetoDB/Tabelas.sql)
+- [Procedures](ProjetoDB/Procedures.sql)
+- [Views](ProjetoDB/Views.sql)
+- [Transações](ProjetoDB/Transacoes.sql)
+- [Segurança](ProjetoDB/Seguranca.sql)
+- [Testes e inserts](ProjetoDB/Testes%20e%20Inserts.sql)
+
+## Documentação do projeto
+
 Sistema de Controle de Notebooks Corporativos
 Integrantes
 César de Oliveira Zanelatto
@@ -226,3 +243,8 @@ Chaves primárias
 Chaves estrangeiras
 
 O projeto foi desenvolvido com foco em boas práticas de modelagem de banco de dados, normalização, segurança, integridade referencial e controle de ativos corporativos, atendendo aos requisitos propostos para a disciplina de Banco de Dados.
+
+
+---
+
+[← Portfólio de Kleber Amaro](https://github.com/Kleber720) · [Todos os repositórios](https://github.com/Kleber720?tab=repositories)
