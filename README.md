@@ -1,250 +1,107 @@
-# Projeto Banco de Dados
+# Corporate Notebook Management Database
 
 ![SQL](https://img.shields.io/badge/SQL-2563EB?style=flat-square) ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white)
 
-**Controle de notebooks corporativos.** Trabalho em equipe do Senac Santana, com participação de César de Oliveira Zanelatto, Kleber Amaro da Silva e Rafael Sper Moralli. Este repositório é um fork de [CesarZanelatto/ProjetoBancodeDados](https://github.com/CesarZanelatto/ProjetoBancodeDados).
+**Main portfolio project — collaborative database system.** Developed at Senac Santana by **César de Oliveira Zanelatto, Kleber Amaro da Silva, and Rafael Sper Moralli**. This repository is a fork of [CesarZanelatto/ProjetoBancodeDados](https://github.com/CesarZanelatto/ProjetoBancodeDados).
 
-## Navegação pelos scripts
+## Overview
 
-- [Criação do banco](ProjetoDB/CriacaoDoDB.sql)
-- [Tabelas](ProjetoDB/Tabelas.sql)
-- [Procedures](ProjetoDB/Procedures.sql)
+A MySQL database for managing corporate notebooks, employees, and departments. Its purpose is to identify who is using each notebook, which department they belong to, and which devices are available.
+
+## Scope
+
+- Employee, department, and notebook registration.
+- Notebook assignment and return operations.
+- Equipment lookup and reports through views.
+- Stored procedures, transactions, and security scripts.
+
+## Scripts
+
+- [Database creation](ProjetoDB/CriacaoDoDB.sql)
+- [Tables and relationships](ProjetoDB/Tabelas.sql)
+- [Stored procedures](ProjetoDB/Procedures.sql)
 - [Views](ProjetoDB/Views.sql)
-- [Transações](ProjetoDB/Transacoes.sql)
-- [Segurança](ProjetoDB/Seguranca.sql)
-- [Testes e inserts](ProjetoDB/Testes%20e%20Inserts.sql)
+- [Transactions](ProjetoDB/Transacoes.sql)
+- [Security](ProjetoDB/Seguranca.sql)
+- [Test data and inserts](ProjetoDB/Testes%20e%20Inserts.sql)
 
-## Documentação do projeto
+## Data model
 
-Sistema de Controle de Notebooks Corporativos
-Integrantes
-César de Oliveira Zanelatto
-Kleber Amaro da Silva
-Rafael Sper Moralli
-Descrição do Projeto
+- **Departments (`setor`)** store a department ID, name, and description.
+- **Employees (`FUNCIONARIO`)** store identity and contact information and reference a department.
+- **Notebooks (`NOTEBOOK`)** store asset and serial numbers, hardware specifications, acquisition date, availability, and an optional responsible employee.
 
-O Sistema de Controle de Notebooks Corporativos foi desenvolvido para auxiliar o setor de TI no gerenciamento de notebooks da empresa.
+The SQL identifiers retain their original Portuguese names. Refer to [Tabelas.sql](ProjetoDB/Tabelas.sql) for the implemented field types and constraints.
 
-O sistema permite:
+## Business rules
 
-Cadastro de funcionários
-Cadastro de setores
-Cadastro de notebooks
-Atribuição de notebooks aos funcionários
-Devolução de notebooks
-Consulta de equipamentos
-Geração de relatórios através de Views
-Controle de acesso e segurança dos dados
-Objetivo
+1. Each employee belongs to one department; a department may have multiple employees.
+2. Each notebook can be assigned to only one employee at a time.
+3. An employee may receive registered notebooks.
+4. Asset numbers and serial numbers must be unique.
+5. Available notebooks may have no responsible employee.
 
-Centralizar o controle dos notebooks corporativos, permitindo identificar rapidamente:
+## Procedures and views
 
-Qual funcionário está utilizando um notebook
-Em qual setor o funcionário trabalha
-Quantos equipamentos estão disponíveis
+The project documentation describes employee procedures such as `inserirFuncionario()`, `buscarFuncionario()`, and `quantidadeFuncionarios()`, and notebook procedures such as `inserirNotebook()`, `buscarNotebook()`, `quantidadeNotebooks()`, and `categoriaNotebook()`.
 
-Tecnologias Utilizadas
-MySQL
-XAMPP
-MySQL Workbench
-GitHub
-Estrutura do Banco de Dados
-Entidades Principais
+Assignment and return operations are represented by `atribuirNotebook()` and `devolverNotebook()`. The documented views include:
 
-SETOR
-Responsável por armazenar os setores da empresa.
-Campo	Tipo
-id_setor	INT
-nome_setor	ENUM
-descricao	VARCHAR
+- `view_notebooks_detalhado` — notebook, employee, role, and department details.
+- `view_notebooks_disponiveis` — available devices.
+- `vw_notebooks_por_setor` — totals and availability by department.
 
-FUNCIONARIO
-Responsável por armazenar os colaboradores.
-Campo	Tipo
-id_funcionario	INT
-nome	VARCHAR
-cpf	VARBINARY
-cargo	VARCHAR
-email	VARBINARY
-telefone	VARCHAR
-id_setor	INT
+Consult the linked SQL scripts for their definitions and execution requirements.
 
-NOTEBOOK
-Responsável pelo controle dos equipamentos.
-Campo	Tipo
-id_notebook	INT
-patrimonio	VARBINARY
-marca	VARCHAR
-modelo	VARCHAR
-numero_serie	VARCHAR
-processador	VARCHAR
-memoria_ram	VARCHAR
-armazenamento	VARCHAR
-data_aquisicao	DATE
-status	ENUM
-id_funcionario	INT
-HISTORICO_ATRIBUICAO
+## Transactions and security
 
-Regras de Negócio
-RN01
-Cada funcionário pertence a apenas um setor.
+The assignment workflow checks the notebook, its availability, and the employee before updating the device and committing the operation. The return workflow removes the responsible employee and marks the notebook as available.
 
-RN02
-Um setor pode possuir vários funcionários.
+The security script contains database-user and permission examples, along with AES encryption/decryption examples. Use the source scripts to inspect the implemented security operations and their relationship with the table definitions.
 
-RN03
-Um notebook pode ser atribuído a apenas um funcionário por vez.
+## Local setup
 
-RN04
-Um funcionário pode receber notebooks cadastrados no sistema.
+Use a local MySQL installation and a SQL client such as MySQL Workbench. XAMPP was also used in the project environment.
 
-RN05
-Todo notebook deve possuir patrimônio único.
+```sh
+git clone https://github.com/Kleber720/ProjetoBancodeDados.git
+cd ProjetoBancodeDados
+```
 
-RN06
-Todo notebook deve possuir número de série único.
+Open the SQL files in your client. Create the database first, then the tables. Review the procedures, views, transactions, security, and test-data scripts before running the operations you need.
 
-RN07
-Um notebook pode permanecer sem funcionário responsável quando estiver disponível.
+### Backup and restore
 
-Procedures
+The original Windows/XAMPP workflow uses:
 
-Funcionários
-inserirFuncionario()
-buscarFuncionario()
-quantidadeFuncionarios()
-
-Notebooks
-inserirNotebook()
-buscarNotebook()
-quantidadeNotebooks()
-categoriaNotebook()
-
-Transações
-atribuirNotebook()
-devolverNotebook()
-Views
-view_notebooks_detalhado
-
-Exibe:
-
-Dados do notebook
-Funcionário responsável
-Cargo
-Setor
-view_notebooks_disponiveis
-
-Lista equipamentos disponíveis.
-
-vw_notebooks_por_setor
-
-Relatório contendo:
-
-Quantidade total de notebooks
-Disponíveis
-Indisponíveis
-Segurança
-Criptografia
-
-Os seguintes dados são armazenados criptografados utilizando AES:
-
-CPF
-E-mail
-Patrimônio
-
-Exemplo:
-
-AES_ENCRYPT(valor,'1234')
-
-Descriptografia:
-
-AES_DECRYPT(valor,'1234')
-Controle de Usuários
-
-Criação de usuário:
-
-CREATE USER 'cesar'@'%' IDENTIFIED BY '1234';
-
-Permissões:
-
-GRANT ALL PRIVILEGES
-ON ProjetoDB.*
-TO 'cesar'@'%';
-Transações
-
-As transações garantem a integridade das operações.
-
-Atribuição de Notebook
-
-Fluxo:
-
-Verifica se o notebook existe
-Verifica se está disponível
-Verifica se o funcionário existe
-Atualiza o notebook
-Executa COMMIT
-
-Fluxo:
-
-Remove o responsável
-Atualiza status para disponível
-Executa COMMIT
-
-Backup e Recuperação
-
-Backup
+```bat
 "C:\xampp\mysql\bin\mysqldump.exe" -u root ProjetoDB > backup.sql
-
-Recuperação
 "C:\xampp\mysql\bin\mysql.exe" -u root ProjetoDB < backup.sql
+```
 
-Normalização
-Primeira Forma Normal (1FN)
-Não existem grupos repetitivos.
-Todos os atributos possuem valores atômicos.
+## Modeling approach
 
-Segunda Forma Normal (2FN)
-Todos os atributos dependem integralmente da chave primária.
+The project documentation discusses normalization through 1NF, 2NF, and 3NF: atomic values, dependencies on primary keys, and separation of entities to reduce transitive dependencies.
 
-Terceira Forma Normal (3FN)
-Não existem dependências transitivas.
-Os dados foram separados em entidades próprias.
+## Diagrams
 
-Diagramas
+### Use-case diagram
 
-Diagrama de Caso de Uso
+The IT administrator manages employees and notebooks, checks reports, and controls equipment assignments.
 
-<img width="413" height="548" alt="image" src="https://github.com/user-attachments/assets/602b5420-e4fa-42f0-a579-f312f608d027" />
+<img width="413" height="548" alt="Corporate notebook management use-case diagram" src="https://github.com/user-attachments/assets/602b5420-e4fa-42f0-a579-f312f608d027" />
 
+### Entity-relationship diagram
 
+The diagram shows entities, relationships, cardinalities, primary keys, and foreign keys.
 
-Descrição:
+<img width="571" height="467" alt="Corporate notebook management entity-relationship diagram" src="https://github.com/user-attachments/assets/88a32d73-d5b5-42f7-8278-78af26753024" />
 
-O Administrador de TI é responsável por:
+## Skills applied
 
-Gerenciar funcionários
-Gerenciar notebooks
-Consultar relatórios
-Controlar atribuições
-Diagrama UML / DER
-
-
-<img width="571" height="467" alt="image" src="https://github.com/user-attachments/assets/88a32d73-d5b5-42f7-8278-78af26753024" />
-
-
-Descrição:
-
-Representa:
-
-Entidades
-Relacionamentos
-Cardinalidades
-Chaves primárias
-Chaves estrangeiras
-
-O projeto foi desenvolvido com foco em boas práticas de modelagem de banco de dados, normalização, segurança, integridade referencial e controle de ativos corporativos, atendendo aos requisitos propostos para a disciplina de Banco de Dados.
+Relational database modeling, SQL, referential integrity, stored procedures, transactions, reporting views, and collaborative development.
 
 
 ---
 
-[← Portfólio de Kleber Amaro](https://github.com/Kleber720) · [Todos os repositórios](https://github.com/Kleber720?tab=repositories)
+[Kleber Amaro’s portfolio](https://github.com/Kleber720) · [All repositories](https://github.com/Kleber720?tab=repositories)
